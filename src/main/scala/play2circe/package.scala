@@ -15,7 +15,7 @@ package object play2circe {
       case JsNumber(value)  => value.asJson
       case JsString(value)  => value.asJson
       case JsArray(value)   => value.map(convert).asJson
-      case JsObject(value)  => Json.obj(value.view.mapValues(convert).toSeq: _*)
+      case JsObject(value)  => Json.obj(value.map { case (k, v) => k -> convert(v) }.toSeq: _*)
     }
   }
 
