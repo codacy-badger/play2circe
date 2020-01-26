@@ -19,15 +19,14 @@ package object play2circe {
     }
   }
 
-  def decoderFromReads[T: Reads]: Decoder[T] = Decoder.decodeJson.emap { json =>
-    Try(PlayJson.parse(json.noSpaces).validate[T]).toEither.left.map(_.getMessage).flatMap {
+  def decoderFromReads[A: Reads]: Decoder[A] = Decoder.decodeJson.emap { json =>
+    Try(PlayJson.parse(json.noSpaces).validate[A]).toEither.left.map(_.getMessage).flatMap {
       case JsSuccess(value, _) => Right(value)
       case JsError(errors)     => Left(errors.flatMap(_._2).map(_.message).mkString(", "))
     }
   }
 
-  def encoderFromWrites[T: Writes]: Encoder[T] = Encoder.instance { value =>
-    convert(implicitly[Writes[T]].writes(value))
+  def encoderFromWrites[A](implicit writes: Writes[A]): Encoder[A] = Encoder.instance { value =>
+    convert(writes.writes(value))
   }
-
 }

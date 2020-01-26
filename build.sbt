@@ -11,7 +11,9 @@ releaseCrossBuild := true
 
 libraryDependencies := Seq(
   playJson,
-  circe
+  circe,
+  scalaCheck,
+  circeParser
 )
 
 scalafmtOnCompile := true
