@@ -9,12 +9,16 @@ scalaVersion       := crossScalaVersions.value.head
 
 releaseCrossBuild := true
 
-libraryDependencies := Seq(
+libraryDependencies ++= Seq(
   playJson,
   circe,
   scalaCheck,
   circeParser
 )
+
+wartremoverErrors in (Compile, compile) ++= Warts.unsafe
+
+coverageEnabled := true
 
 scalafmtOnCompile := true
 
