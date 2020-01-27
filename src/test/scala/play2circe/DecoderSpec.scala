@@ -16,8 +16,9 @@ object DecoderSpec extends Properties("Decoder") with Generators {
 
   private def check[A](value: A)(implicit reads: Reads[A], writes: Writes[A]): Boolean = {
     val json        = writes.writes(value).toString
-    val circeResult = parse(json).flatMap(decoderFromReads(reads).decodeJson).getOrElse(sys.error(s"Can't parse $json"))
-    val playResult  = Json.parse(json).validate[A].getOrElse(sys.error(s"Can't parse $json"))
+    val circeResult = parse(json).flatMap(decoderFromReads(reads).decodeJson)
+    val playResult  = Json.parse(json).validate[A].asEither
+
     circeResult == playResult
   }
 }

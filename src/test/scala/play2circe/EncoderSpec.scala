@@ -3,6 +3,7 @@ package play2circe
 import org.scalacheck.Prop.forAll
 import org.scalacheck.{Prop, Properties}
 import play.api.libs.json.Writes
+import io.circe.parser.parse
 
 object EncoderSpec extends Properties("Encoder") with Generators {
 
@@ -14,6 +15,9 @@ object EncoderSpec extends Properties("Encoder") with Generators {
   property("encode objects")  = forAll(check(_: Map[String, String]))
 
   private def check[A](value: A)(implicit writes: Writes[A]): Boolean = {
-    encoderFromWrites[A](writes)(value).noSpaces == writes.writes(value).toString
+    val circeResult = encoderFromWrites[A](writes)(value).noSpaces
+    val playResult  = writes.writes(value).toString
+
+    parse(circeResult) == parse(playResult)
   }
 }
