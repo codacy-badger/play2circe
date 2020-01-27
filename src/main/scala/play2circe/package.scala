@@ -22,7 +22,7 @@ package object play2circe {
   def decoderFromReads[A: Reads]: Decoder[A] = Decoder.decodeJson.emap { json =>
     Try(PlayJson.parse(json.noSpaces).validate[A]).toEither.left.map(_.getMessage).flatMap {
       case JsSuccess(value, _) => Right(value)
-      case JsError(errors)     => Left(errors.flatMap(_._2).map(_.message).mkString(", "))
+      case JsError(errors)     => Left(errors.flatMap { case (_, errors) => errors }.map(_.message).mkString(", "))
     }
   }
 

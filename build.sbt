@@ -16,8 +16,6 @@ libraryDependencies ++= Seq(
   circeParser
 )
 
-wartremoverErrors in (Compile, compile) ++= Warts.unsafe
-
 coverageEnabled := true
 
 scalafmtOnCompile := true
