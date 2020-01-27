@@ -12,6 +12,6 @@ jobs:
     - name: Set up JDK
       uses: actions/setup-java@v1
       with:
-        java-version: jdk11
+        java-version: openjdk11
     - name: Run tests
       run: sbt test
